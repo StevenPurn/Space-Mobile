@@ -13,6 +13,6 @@ public class EngineFireMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        transform.localScale = new Vector3(gameController.GetComponent<UITracker>().currentSpeed * .05f, 1, 1);
+        //transform.localScale = new Vector3(gameController.GetComponent<UITracker>().currentSpeed * .05f, 1, 1);
     }
 }

@@ -3,8 +3,6 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
-
-    public GameObject gameController;
     public int speed = 1;
     public GameObject target;
     public Animator anim;
@@ -14,22 +12,45 @@ public class PlayerMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        gameController = GameObject.Find("GameController");
         anim = GetComponent<Animator>();
     }
 
+    private void Update()
+    {
+        CheckInput();
+    }
+
+    //Listen for new taps
+    void CheckInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            if (hit.collider != null)
+            {
+                Rooms room = hit.collider.GetComponent<Rooms>();
+                if (hit.collider.GetComponent<Rooms>() != null)
+                {
+                    room = hit.collider.GetComponent<Rooms>();
+                }
+                else
+                {
+                    room = hit.collider.GetComponentInParent<Rooms>();
+                }
+
+                target = room.roomPosition;
+            }
+        }
+    }
+
+    //Move the player
     void FixedUpdate()
     {
         if (target != null)
         {
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y,-2), new Vector3(target.transform.position.x, gameObject.transform.position.y, -2), step);
-            anim.SetBool("Walking",true);
-            anim.SetBool("MedBayHealing", false);
-            anim.SetBool("CockpitNav", false);
-            anim.SetBool("Idle", false);
-            anim.SetBool("EngineControl", false);
-            anim.SetBool("FireFighting", false);
+            AnimationController.SetAnimation("Walking");
 
             if (transform.position.x < target.transform.position.x)
             {
@@ -47,60 +68,38 @@ public class PlayerMovement : MonoBehaviour
             if(transform.position.x == target.transform.position.x)
             {
                 target = null;
-                anim.SetBool("Walking", false);
             }
         }
         else
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            anim.SetBool("Walking", false);
         }
-
         GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.down * 250 * Time.deltaTime);
-
     }
 
+    //Inform rooms that player has arrived in the room & the active position
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Rooms")
         {
-            gameController.GetComponent<RoomTracking>().updateRoom(other.gameObject.name.ToString());
+            other.GetComponent<Rooms>().playerInRoom = true;
         }
         else if (other.tag == "Position")
         {
-            switch (other.gameObject.name)
-            {
-                case "MedBayPosition":
-                    GameObject.Find("MedBay").GetComponent<MedBayScript>().inPosition = true;
-                    anim.SetBool("Walking", false);
-                    break;
-                case "EnginePosition":
-                    GameObject.Find("Engine").GetComponent<EngineScript>().inPosition = true;
-                    anim.SetBool("Walking", false);
-                    break;
-                case "CockpitPosition":
-                    GameObject.Find("Cockpit").GetComponent<CockpitScript>().inPosition = true;
-                    anim.SetBool("Walking", false);
-                    break;
-                case "EmptyPosition":
-                    GameObject.Find("Empty").GetComponent<EmptyScript>().inPosition = true;
-                    anim.SetBool("Walking", false);
-                    break;
-                default:
-                    Debug.Log("something");
-                    break;
-            }
+            other.GetComponentInParent<Rooms>().playerInPosition = true;
         }
     }
 
+    //Inform rooms when player leaves the room & the active position
     void OnTriggerExit2D(Collider2D other)
     {
-        if(other.tag == "Position")
+        if(other.tag == "Rooms")
         {
-            GameObject.Find("MedBay").GetComponent<MedBayScript>().inPosition = false;
-            GameObject.Find("Cockpit").GetComponent<CockpitScript>().inPosition = false;
-            GameObject.Find("Engine").GetComponent<EngineScript>().inPosition = false;
-            GameObject.Find("Empty").GetComponent<EmptyScript>().inPosition = false;
+            other.GetComponent<Rooms>().playerInRoom = false;
+        }
+        else if(other.tag == "Position")
+        {
+            other.GetComponentInParent<Rooms>().playerInPosition = false;
         }
     }
 }

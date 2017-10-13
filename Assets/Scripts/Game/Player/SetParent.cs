@@ -7,12 +7,17 @@ public class SetParent : MonoBehaviour {
     public Vector3 offset;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Awake () {
+        SetParentObject();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        transform.position = parentObject.transform.position + offset;
+        SetParentObject();
 	}
+
+    void SetParentObject()
+    {
+        transform.position = parentObject.transform.position + offset;
+    }
 }

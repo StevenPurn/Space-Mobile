@@ -17,7 +17,7 @@ public class BackgroundScrolling : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        shipSpeed = GameObject.Find("Engine").GetComponent<EngineScript>().shipSpeed;
+        shipSpeed = 2; //GameObject.Find("Engine").GetComponent<EngineScript>().shipSpeed;
 
         backgroundScrollSpeed = Mathf.Repeat(shipSpeed * scrollSpeed * Time.time, 2f) -1;
 

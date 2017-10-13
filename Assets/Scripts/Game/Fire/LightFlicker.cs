@@ -2,18 +2,19 @@
 using System.Collections;
 
 public class LightFlicker : MonoBehaviour {
-    public float minIntensity = 0.25f;
-    public float maxIntensity = 0.5f;
+    [SerializeField]
+    private float minIntensity = 6f;
+    private float maxIntensity = 8f;
 
-    float random;
+    private Light lightSource;
 
-    void Start()
+    private void Start()
     {
-
+        lightSource = GetComponent<Light>();
     }
 
     void Update()
     {
-        GetComponent<Light>().intensity = Random.Range(6.0f, 8.0f);
+        lightSource.intensity = Random.Range(minIntensity, maxIntensity);
     }
 }
