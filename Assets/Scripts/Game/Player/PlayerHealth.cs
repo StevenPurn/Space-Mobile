@@ -15,12 +15,8 @@ public class PlayerHealth : MonoBehaviour {
 
     public static void changeHealth(int changeValue)
     {
-        Debug.Log("current health is:" + playerHealth);
-
-        //function to alter the health value of the player
         playerHealth += changeValue;
 
-        //ensure player isn't dead or over max health
         if(playerHealth <= 0)
         {
             playerHealth = 0;
@@ -35,6 +31,5 @@ public class PlayerHealth : MonoBehaviour {
     public static void playerDeath()
     {
         AnimationController.SetAnimation("Dead");
-        //GameObject.Find("GameController").GetComponent<ShipTracking>().GameOver(false);
     }
 }

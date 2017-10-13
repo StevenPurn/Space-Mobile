@@ -7,12 +7,11 @@ public class Rooms : MonoBehaviour {
     public bool playerInRoom = false;
     public bool playerInPosition = false;
     public Fire fire;
+    public GameObject roomPosition;
 
     [SerializeField]
     private Light roomLight;
 
-    public GameObject malfunctionWarning;
-    public GameObject roomPosition;
 
     // Use this for initialization
     void Start () {

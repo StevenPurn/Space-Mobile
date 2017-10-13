@@ -8,16 +8,19 @@ public class SetParent : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        SetParentObject();
+        SetPosition();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        SetParentObject();
+        SetPosition();
 	}
 
-    void SetParentObject()
+    void SetPosition()
     {
-        transform.position = parentObject.transform.position + offset;
+        Vector3 pos = Camera.main.WorldToScreenPoint(parentObject.transform.position);
+        Quaternion rot = GameObject.Find("Ship").transform.rotation;
+        transform.position = pos + offset;
+        transform.rotation = rot;
     }
 }

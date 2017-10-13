@@ -3,16 +3,10 @@ using System.Collections;
 
 public class EngineFireMovement : MonoBehaviour {
 
-    public GameObject gameController;
-
-	// Use this for initialization
-	void Start () {
-        gameController = GameObject.Find("GameController");
-	}
-	
-	// Update is called once per frame
+	// Can set this only when speed is changed in the future
 	void Update () {
 
-        //transform.localScale = new Vector3(gameController.GetComponent<UITracker>().currentSpeed * .05f, 1, 1);
+        float speedPercentage = Ship.currentSpeed / Ship.maxSpeed;
+        transform.localScale = new Vector3(speedPercentage, 1, 1);
     }
 }
